@@ -1,0 +1,22 @@
+<html>
+    <head>
+        <title>error! | AgroShop</title>
+        <!--Favicon-->
+        <link rel="icon" href="../../static/Bag_favicon.jpg" type="image/x-icon">
+    </head>
+    <body>
+        <h3>{{message}}</h3>
+        redirecting you back, {{info}}
+        <script>
+            // sleep time expects milliseconds
+            function sleepNow (time) {
+                return new Promise((resolve) => setTimeout(resolve, time));
+            }
+            // Usage!
+            sleepNow(2500).then(() => {
+                // Do something after the sleep!
+            window.history.back();
+            });
+        </script>
+    </body>
+</html>

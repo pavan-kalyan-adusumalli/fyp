@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>AgroShop Location Search</title>
+        <!--Favicon-->
+        <link rel="icon" href="../../static/Bag_favicon.jpg" type="image/x-icon">
+        <!-- font awesome link -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+        <link rel="stylesheet" href="../../static/style.css">
+        <script src="../../static/script.js"></script>
+        <!-- Bootstrap Link -->
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+    </head>
+    <body>
+        <div id="imagediv">
+            <p id="sitetitle"><i>agro shop</i></p>
+            <p id="subtitle">
+                Discover the Hygenic, High Quality & Budget Friendly products around you
+            </p>
+            <form id="locationsearchform" action="{% url 'shopsaroundyou' %}" method="post">
+                {%csrf_token%}
+                <div class="input-group mb-3" id="searchbardiv">
+                    <input type="text" class="form-control" name="locationname" placeholder="Search for nearest store, seller" aria-label="Recipient's username" aria-describedby="basic-addon2">
+                    <div class="input-group-append">
+                      <button class="btn btn-secondary" type="submit" style="background-color: #febd69;">Search</button>
+                    </div>
+                </div>
+                <br><br><br><br><br><br><br>
+
+            </form>
+        </div>
+
+        <div id="hoardingparent">
+
+            <a href="{% url 'homepage'%}">
+                <div class="hoarding shadow mb-5 bg-red rounded">
+                    <img src="../../static/fresh_veggies.jpg" alt="">
+                    <p>Order Online</p>
+                </div>
+            </a>
+            <a href="">
+                <div class="hoarding shadow mb-5 bg-red rounded">
+                    <img src="../../static/visitstore.png" alt="">
+                    <p>Visit Stores</p>
+                </div>
+            </a>
+            <div class="hoarding shadow mb-5 bg-red rounded">
+                <img src="../../static/hygenic.jpg" alt="">
+                <p>100% Hygenic</p>
+            </div>
+            <div class="shadow mb-5 bg-red rounded hoarding" style="padding: 0px;">
+                <img src="../../static/fresh_fruits.jpg" alt="">
+                <p>Healthy & Tasty</p>
+            </div>
+            
+        </div>
+
+        <script>
+
+            // function changeImage()
+            // {
+            //     var imagesArr = ["url(../../static/loc5.jpg)", "url(../../static/loc8.jpg)", "url(../../static/loc9.jpg)", "url(../../static/loc10.jpg)", "url(../../static/fresh_fruits.jpg)"]
+            //     var imagediv = document.getElementById("imagediv");
+            //     var arrlength = imagesArr.length;
+            //     var i = Math.floor(Math.random() * 4);
+            //     imagediv.style.backgroundImage = imagesArr[i];
+
+            // }
+
+            window.setInterval(changeImage, 3500);
+            
+            
+        </script>
+    </body>
+</html>

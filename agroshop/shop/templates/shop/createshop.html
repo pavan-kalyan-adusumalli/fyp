@@ -1,0 +1,39 @@
+{% extends 'shop/shopCreatingLayout.html' %}
+
+{% block title %}Create Shop | AgroShop{% endblock %}
+
+{% block body%}
+<div id="shopdetails">
+    <img src="../../static/createShop.jpeg" alt="" width="85%">
+    <div id="shopdetailsform">
+        <h3>Create your shop name</h3>
+        <p style="font-size:14px; color: rgb(128, 126, 126);">You can use your brand's name or another name. A good shop name represents you and your products. You can change your shop name at any time.
+            <a href="https://www.youtube.com/watch?v=y41nwoG8em8&feature=youtu.be" target="_blank">Learn more</a>
+        </p>
+        <form action="{% url 'setupshop' %}" method="POST">
+             {%csrf_token%}
+            <div class="form-group" style="text-align: left;">
+                <label class="form-control container" for="customShopName">Shop name</label>
+                <input id="shopname" type="text" class="form-control" placeholder="Add shop name here" name="customShopName" required>
+                
+                <!--checkbox-->
+                <label class="checkbox-inline" style="margin-top: 7px;">
+                    <input onclick="unlockBtn()" id="cbox" type="checkbox" required>
+                    I understand that I am creating a new Google Account with its own settings.
+                    <a href="https://safety.google/">Learn more</a>
+                </label>
+                <!--checkbox ends-->
+
+            </div>
+            <a href="{% url 'homepage' %}"><button class="btn btn-light" style="color: blue; background-color:white">CANCEL</button></a>
+            <button class="btn btn-light" style="color: white; background-color:#008CBA" type="submit" id="createbtn">CREATE</button>
+        </form>   
+        <br>
+    </div>
+    <div style="padding: 18px 80px 0 80px;">
+        <p><small>You can view your Google Account at anytime by just logging into <a href="https://myaccounts.google.com">myaccount.google.com</a><br>Learn more about channels and brand accounts. By selecting 'Create' you agree to<br><a href="">AgroShop's Terms of Service.</a></small></p>
+
+        <small>&copy; 2022 Google</small>
+    </div>
+</div>
+{%endblock%}

@@ -1,0 +1,179 @@
+<html lang="en">
+    <head>
+        <title>Select a delivary address</title>
+        <!--Favicon-->
+        <link rel="icon" href="../../static/Bag_favicon.jpg" type="image/x-icon">
+        <!-- Bootstrap Link -->
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"
+        integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+
+        <!-- font awesome link -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+        <link rel="stylesheet" href="../../static/style.css">
+        <script src="../../static/script.js"></script>
+
+        <!-- JQUERY (First) -->
+        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+            integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+            crossorigin="anonymous"></script>
+
+        <!-- Popper JS -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js"
+            integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut"
+            crossorigin="anonymous"></script>
+
+        <!-- BOOTSTRAP JS (Last) -->
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js"
+            integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k"
+            crossorigin="anonymous"></script>
+
+        <!-- HANDLE BARS TEMPLATE-->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.11/handlebars.min.js"></script>
+
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
+
+        <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+        
+        <style>
+            label, #adsubmitbtn{
+                margin-left: 25px;
+            }
+
+            #adsubmitbtn{
+                margin-bottom: 30px;
+            }
+
+            #selad > p, #selad>a{
+                margin-left: 25px;
+            }
+            #selad{
+                margin-bottom: 0px;
+            }
+
+            
+            
+
+        </style>
+        
+    </head>
+
+    <body>
+        <img src="../../static/Screenshot (86).png" alt="" width="130px" height="55px">
+
+        {% if savedadd%}
+            <div id="selad" class="shadow-sm p-3 bg-white rounded">
+                <h3>Select delivary address</h3>
+                <small style="margin-left: 25px;">Is the address you'd like to use displayed below? If so, click the corresponding "Deliver to this address" button. Or you can <a href="#addnewaddressdiv">enter a new delivery address.</a></small> <br>
+                <hr>
+                <p style="display: inline-block;">
+                    <b>{{savedadd.fullname}}</b> <br>
+                    <small>{{savedadd.house_no}}</small> <br> 
+                    <small>{{savedadd.area}}</small> <br>
+                    <small>{{savedadd.city}}</small> <br>
+                    <small>{{savedadd.state}}</small> <br>
+                    <small>{{savedadd.pincode}}</small> <br>
+                    <small>{{savedadd.country}}</small> <br>
+                </p> <br>
+                <!-- if used previously saved address directly redirecting to checkout using this button -->
+                {% if iscart%}
+                    <a href="{% url 'checkoutcart' cartobj.id %}"><button class="btn" type="submit" style="background-color: #f2cc6e;">Use this address</button></a>
+                {%else%}
+                    <a href="{% url 'checkoutproduct' prodobj.id %}"><button class="btn" type="submit" style="background-color: #f2cc6e;">Use this address</button></a>
+                {%endif%}
+
+            </div>
+        {%endif%}
+
+        <div id="addnewaddressdiv" class="shadow p-3 mb-5 bg-white rounded">
+            <h3 class="">Add a new Address</h3>
+            <small>Fill in the below fields to select a new address to which products are to be delivered.</small>
+        </div>
+
+        {%if iscart%}
+            <form action="{% url 'selectaddressforcart' cartobj.id %}" method="POST" enctype="multipart/form-data">
+        {%else%}
+            <form action="{% url 'selectaddressforprod' prodobj.id %}" method="POST" enctype="multipart/form-data">
+        {%endif%}
+            
+
+            {%csrf_token%}
+            
+            <label for="fullname">Full name</label>
+            {{form.fullname}} <br>
+
+            <label for="mobilenumber">Mobile number</label>
+            {{form.mobilenumber}}  <br>
+
+            <label for="pincode">Pincode</label>
+            {{form.pincode}}  <br>
+
+            <label for="house_no">Flat, House no., Building, Company, Apartment</label>
+            {{form.house_no}} <br>
+
+            <label for="area">Area, Street, Sector, Village</label>
+            {{form.area}} <br>
+
+            <label for="landmark">Landmark</label>
+            {{form.landmark}} <br>
+
+            <label for="city">Town/City</label>
+            {{form.city}} <br>
+
+            <label for="state">State</label>
+            {{form.state}} <br><br>
+
+            <label for="country">Country</label>
+            {{form.country}} <br>
+
+            <label for="addresstype">Address Type</label>
+            {{form.addresstype}} 
+
+            {{form.address_owner}}
+            <p id="userobjid" tabindex="-1" style="display: inline-block; color: #ffffff;">{{userobj.id}}</p> <br><br>
+
+            <button id="adsubmitbtn" class="btn" type="submit" style="background-color: #f2cc6e;">Use this address</button>
+        </form>
+        <hr style="width: 80%;">
+
+
+        <div style="text-align: center;">
+            <small><a href="">Privacy Notice</a> &copy; 2012-2022, AgroShop.com</small>
+            <br>
+            <br>
+        </div>
+        <script>
+            document.addEventListener('DOMContentLoaded', ()=>{
+                document.querySelector('#id_fullname').style.width = "300px";
+                document.querySelector('#id_fullname').style.marginLeft = "25px";
+
+                document.querySelector('#id_mobilenumber').style.width = "300px";
+                document.querySelector('#id_mobilenumber').style.marginLeft = "25px";
+
+                document.querySelector('#id_pincode').style.width = "300px";
+                document.querySelector('#id_pincode').style.marginLeft = "25px";
+
+                document.querySelector('#id_house_no').style.width = "300px";
+                document.querySelector('#id_house_no').style.marginLeft = "25px";
+
+                document.querySelector('#id_area').style.width = "300px";
+                document.querySelector('#id_area').style.marginLeft = "25px";
+
+                document.querySelector('#id_landmark').style.width = "300px";
+                document.querySelector('#id_landmark').style.marginLeft = "25px";
+
+                document.querySelector('#id_city').style.width = "300px";
+                document.querySelector('#id_city').style.marginLeft = "25px";
+
+                document.querySelector('#id_country').style.width = "300px";
+                document.querySelector('#id_country').style.marginLeft = "25px";
+
+                const user_obj_id = document.querySelector('#userobjid').innerHTML;
+                document.querySelector('#id_address_owner').value = user_obj_id;
+                document.querySelector('#id_address_owner').style.color = "#ffffff";
+                document.querySelector('#id_address_owner').style.border = '#ffffff';
+                document.querySelector('#id_address_owner').tabIndex = "-1";
+
+            })
+        </script>
+    </body>
+</html>

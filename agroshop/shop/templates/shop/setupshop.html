@@ -1,0 +1,166 @@
+{% extends 'shop/shopCreatingLayout.html' %}
+
+{% block title %}setup shop | AgroShop{% endblock %}
+
+{% block body %}
+<div id="shopdetails" style="width: 55%;">
+    <h4><b>Nice work!</b></h4>
+    <h4><b>Your shop '<span id="cname">{{ShopName}}</span>' has been created.</b></h4>
+    <p><small>Next, follow the steps to complete your shop. You can do these steps now or come back later.</small></p>
+    <img src="../../static/createShop.jpeg" alt="" width="90%">
+
+{% if customizing %}
+    <form action="{% url 'customize' shopobj.id %}" method="POST" enctype="multipart/form-data" style="text-align: center;">
+{% else %}
+    <form action="{% url 'myshop' %}" method="POST" enctype="multipart/form-data" style="text-align: center;">
+{%endif%}
+
+    Your Google Account{{form.owner}} Your shopname{{form.shopname}}
+    <input type="text" id="user" value="{{curuser.id}}" hidden>
+    {% csrf_token %}
+    <div id="shopdetailsform" style="width: 100%; text-align: center;">
+        <br>
+        <h4><b>Upload a profile picture</b></h4>
+        <p><small>Your profile picture appears next to your products and in other places. It's your sigrature image on AgroShop. <br> suggested size is 800X800</small></p>
+        <img src="{{extradata.picture}}" alt="" width="25%" style="border-radius: 50%;">
+        <button style="background-color: white; color:#337ab7; display:block; border:none; margin:5px auto;"><p style="color:#337ab7; display: block; font-weight:500;">UPLOAD PICTURE</p></button>
+        
+        {{form.shoppicture}}
+        <br>
+    </div>
+
+    <div id="shopdetailsform" style="margin-top: 30px; width: 100%;">
+        <br>
+        <h4><b>Create a PassKey</b></h4>
+        <p><small>Remember this passkey, you may have to use it while adding products, customizing shop and other places.</small></p>
+
+        {{form.passkey}}
+        <br>
+    </div>
+
+    <div id="shopdetailsform" style="margin-top: 30px; width: 100%;">
+        <br>
+        <h4><b>Shop Location Details</b></h4>
+        <p><small>Enter City, Latitude and Longitude so that user's can find directions to your shop on maps.</small></p>
+
+        {{form.location}} 
+        {{form.longitude}}
+        {{form.latitude}}
+        {{form.maplink}}
+        
+        <small style="display: inline-block; margin: 10px 0px 10px 0px;"><a href="https://www.youtube.com/watch?v=AuR06JKZkNE" target="_blank">Learn how</a> to add Map link.</small> 
+
+        <br>
+    </div>
+
+    <div id="shopdetailsform" style="margin-top: 30px; width:100%;">
+        <br>
+        <h4><b>Tell customers about your shop</b></h4>
+        <p><small>Let customers know what your products about. Your description can appear in search results and other places.</small></p>
+        
+        {{form.description}}
+
+    </div>
+
+    <div id="shopdetailsform" style="margin-top: 30px; width:100%;">
+        <h4><b>Add links to your sites</b></h4>
+        <p><small>Sharing links helps customers to stay connected with you and your latest products.</small></p>
+
+        <div class="input-group mb-3 links">
+            <div class="input-group-prepend">
+                <span class="input-group-text" id="basic-addon1">Your website</span>
+                {{form.portfolio}}
+            </div>
+        </div>
+
+        <div class="input-group mb-3 links">
+            <div class="input-group-prepend">
+                <span class="input-group-text"><i class="fa fa-facebook-official"></i></span>
+                {{form.fblink}}
+                <div class="input-group-append">
+                    <span class="input-group-text">Add profile name</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="input-group mb-3 links">
+            <div class="input-group-prepend">
+                <span class="input-group-text"><i class="fa fa-twitter"></i></span>
+                {{form.twitterlink}}
+                <div class="input-group-append">
+                    <span class="input-group-text">Add profile name</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="input-group mb-3 links">
+            <div class="input-group-prepend">
+                <span class="input-group-text"><i class="fa fa-instagram"></i></span>
+                {{form.instalink}}
+                <div class="input-group-append">
+                    <span class="input-group-text">Add profile name</span>
+                </div>
+            </div>
+        </div>
+
+        <br>
+    </div>
+    <br>
+    <button style="background-color: white; color:#337ab7; border:none; font-size:11px;"><b>SET UP LATER</b></button>
+    <button onclick="verificationAlert()" class="btn btn-light" style="color: white; background-color:#337ab7; font-size:11px;" type="submit" id="savebtn">SAVE AND CONTINUE</button>
+    <br><br><br>
+</form>
+</div>
+<script>
+    function verificationAlert(){
+        alert("Your store is yet to be verefied by AgroShop");
+    }
+    document.addEventListener('DOMContentLoaded', ()=>{
+        //shopname
+        document.querySelector('#id_shopname').value = document.querySelector('#cname').innerHTML;
+
+        //shop owner
+        document.querySelector('#id_owner').value = document.querySelector('#user').value;
+        document.querySelector('#id_owner').disabled = false;
+
+        // shop picture choose btn
+        document.querySelector("#id_shoppicture").style.marginLeft = '40%';
+        document.querySelector("#id_shoppicture").style.marginRight = 'auto';
+
+        document.querySelector('#id_passkey').placeholder = 'Add your passkey';
+        document.querySelector('#id_passkey').style.width = '50%';
+        document.querySelector('#id_passkey').style.marginLeft = 'auto';
+        document.querySelector('#id_passkey').style.marginRight = 'auto';
+
+        //shop location
+        document.querySelector('#id_location').placeholder = "Enter City Ex: Hyderabad";
+        document.querySelector('#id_longitude').placeholder = "Enter Longitude Value";
+        document.querySelector('#id_latitude').placeholder = 'Enter Latitude Value';
+        document.querySelector('#id_longitude').style.marginTop = "10px";
+        document.querySelector('#id_latitude').style.marginTop = '10px';
+        document.querySelector('#id_maplink').style.marginTop = '10px';
+
+        //shop description
+        document.querySelector('#id_description').placeholder = 'Add shop description';
+        
+        //social links
+        document.querySelector('#id_fblink').placeholder = 'Add profile name';
+        document.querySelector('#id_fblink').value = 'https://www.facebook.com/';
+        document.querySelector('#id_twitterlink').value = 'https://www.twitter.com/';
+        document.querySelector('#id_instalink').value = 'https://www.instagram.com/';
+
+        //submit button lock and unlock
+        document.querySelector('#savebtn').disabled = true;
+
+        function enableBtn()
+        {
+            if(document.querySelector('#id_description').value.length >=1 && document.querySelector('#id_passkey').value.length>=1)
+                document.querySelector('#savebtn').disabled = false;
+            else
+                document.querySelector('#savebtn').disabled = true;
+        }
+        document.querySelector('#id_description').onkeyup = enableBtn;
+        document.querySelector('#id_passkey').onkeyup = enableBtn;
+    })
+</script>
+{%endblock%}

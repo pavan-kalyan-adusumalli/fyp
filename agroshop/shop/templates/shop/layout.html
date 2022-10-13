@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html>
+
+    <head lang="en">
+        <title>{%block title%}{%endblock%}</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <!--Favicon-->
+        <link rel="icon" href="../../static/Bag_favicon.jpg" type="image/x-icon">
+        
+        <!-- Bootstrap Link -->
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"
+            integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+
+        <!-- font awesome link -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+        <link rel="stylesheet" href="../../static/style.css">
+        <script src="../../static/script.js"></script>
+
+        <!-- JQUERY (First) -->
+        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+            integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+            crossorigin="anonymous"></script>
+
+        <!-- Popper JS -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js"
+            integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut"
+            crossorigin="anonymous"></script>
+
+        <!-- BOOTSTRAP JS (Last) -->
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js"
+            integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k"
+            crossorigin="anonymous"></script>
+
+        <!-- HANDLE BARS TEMPLATE-->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.11/handlebars.min.js"></script>
+
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
+
+        <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+        {%block head%}{%endblock%}
+        
+        <style>
+            #overlay1, #overlay2, #overlay3
+            {
+                position: fixed;
+                display: none;
+                width: 100%;
+                height: 100%;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background-color: rgba(0,0,0,0.7);
+                z-index: 2;
+                cursor: pointer;
+            }
+
+            #text
+            {
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                /*font-size: 50px;*/
+                width: 40%;
+                transform: translate(-50%,-50%);
+                -ms-transform: translate(-50%,-50%);
+            }
+        </style>
+    </head> 
+
+    <body>
+        {%verbatim%}
+        <script id="resultHandlebar" type="text/x-handlebars-template">
+            <a class='relatedresults' onclick="setinput(this)" style="border-bottom: 0.5px solid rgb(230, 229, 229); padding-left: 15px;" >{{name}}</a>
+        </script>
+        {%endverbatim%}
+
+        <nav class="navbar navbar-dark bg-dark">
+            <div style="width: 100%;">
+                <a href="{% url 'homepage'%}"><img src="../../static/Screenshot (86).png" alt="Logo"
+                        width="110px" height="40px"></a>
+
+                <a href="{% url 'locationsearch' %}">
+                    <button id="location_button" type="button" class="btn btn-dark nav-item">
+                        <i id="location_icon" class="fas fa-map-marker-alt"></i>
+                        <div id="choose_location_text">Hello<br><b>Choose Location</b></div>
+                    </button>
+                </a>
+
+                <form id="search" action="{% url 'searchsomething' %}" method="POST" style="display: inline-block;">
+                    {% csrf_token %}
+                    <div class="input-group mb-3">
+                        <input id="searchinputfield" type="text" class="form-control" name="searchedtext" placeholder="Search for a Product" aria-label="Recipient's username" aria-describedby="basic-addon2">
+                        <span id="relatedresultsdiv" style="position:absolute; width:87%; margin-left: 20px; display:inline-block;  border:0px solid black; z-index:1; top: 37px;">
+                            
+                        </span>
+                        <div class="input-group-append">
+                            <button class="btn btn-light" style="background-color: #febd69;" type="submit"><i class="fas fa-search"></i></button>
+                        </div>
+                    </div>
+                </form>
+
+
+                {% if user.is_authenticated %}
+
+                <div class="dropleft nav-item" style="width: fit-content; float:right; margin-left:8px; margin-right:10px">
+                    <button class="btn btn-dark" style="padding: 0px 10px 0px 10px;" data-toggle="dropdown">
+                        <div style="display: inline-block;">
+                            <small>Hello, {{request.user.username}}</small><br>
+                            Accounts & Lists
+                        </div>
+                        <div style="display: inline-block; vertical-align:1.5vh; margin-left: 5px;">
+                            <img src={{extradata.picture}} alt={{user}} width="30px" id="signin" style="border-radius: 50%;">
+                        </div>
+                    </button>
+
+                    <!-- <a class="" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true"
+                        aria-expanded="false">
+                        <img src={{extradata.picture}} alt={{user}} width="30px" id="signin" style="border-radius: 50%;">
+                    </a> -->
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+
+                        <div class="dropdown-item">
+                            <img src={{extradata.picture}} alt={{user}} width="35px"
+                                style="border-radius: 50%;">&nbsp;&nbsp;&nbsp;<strong>{{extradata.name}}</strong>
+                        </div>
+                        <div class="dropdown-divider"></div>
+
+                        {% if usershop %}
+                            <a class="dropdown-item" href="{% url 'myshop' %}"><i class="fas fa-store"></i>&nbsp;&nbsp;View your Shop</a>
+                        {%else%}
+                            <!--on(1) which, on click turn on overlay 1-->
+                            <button class="dropdown-item" onclick="on(1)"><i class="fas fa-store"></i>&nbsp;&nbsp;Create a Shop</button>
+                        {%endif%}
+
+                        {% if usershop %}
+                            <a class="dropdown-item" href="{% url 'addproduct' %}"><i class="fas fa-plus-square"></i>&nbsp;&nbsp;Add new Product</a>
+                        {%endif%}
+
+                        <a href="{% url 'viewcart' %}" class="dropdown-item"><i class="fas fa-shopping-cart"></i>&nbsp;&nbsp;View Cart</a>
+                        <a href="{% url 'myorders' %}" class="dropdown-item"><i class="fas fa-history"></i>&nbsp;&nbsp;Your Orders</a>
+
+
+                        <form method="post" class="dropdown-item" action="/accounts/logout/" style="display: inline-block;">
+                            {%csrf_token%}
+                            <button id="signout" class="dropdown-item" type="submit" style="padding: 0px 0px 0px 3px;"><i class="fas fa-sign-out-alt"></i>&nbsp;&nbsp;&nbsp;Sign Out</button>
+                        </form>
+
+                        
+                    </div>
+                </div>
+
+
+
+
+                {% else %}
+                <form method="post" action="/accounts/google/login/?process=login" style="display: inline-block;">
+                    {%csrf_token%}
+                    <button id="signin" class="btn btn-dark nav-item"><i class="fas fa-user"></i>&nbsp;<small>Hello, Sign
+                            in</small><br><b>Use Google Account</b></button>
+                </form>
+                {% endif %}
+
+            </div>
+        </nav>
+        
+
+        <div id="overlay1" onclick="off(1)">
+            <div id="text">
+                <div id="getstarted" style="background-color: white; width:fit-content; text-align:center;">
+                    <img src="../../static/creatingshoplogo1edited.jpg" alt="" width="90%" style="background-position: center;">
+                    <h4>Your Selling journey begins</h4>
+                    <small><p style="padding: 0 5%;">Pursuing your business passions, selling products around the world and sharing health stories begin with creating Agro Shop</p></small>
+                    <button onclick="chooseName()" style="background-color: blue; color:white; padding:5px; font-size:10px; font-weight:550; text-transform:uppercase;">get started</button><br>
+                    <button style="background-color: white; color:blue; padding:5px; font-size:10px; font-weight:550; border:none;">NO, THANKS</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="overlay2">
+            <div id="text">
+                <div id="choosename" style="overflow-y:auto; max-height:470px; background-color: white; width:fit-content; text-align:center;">
+                    <br>
+                    <h3>Choose how to create your channel</h3>
+                    <div id="container" style="text-align: center;">
+                        <div style="width: 50%; min-width:226px; padding:20px; margin:0px auto 0px auto;">
+                            <h5><b>Use your name</b></h5>
+                            <p>Create a shop using name and picture on your Google Account.</p><br>
+                            <img src="{{extradata.picture}}" alt="" width="30%" style="border-radius: 50%;"> <br>
+                            <strong style="display:inline-block; margin-top: 10px;">{{extradata.name}}</strong>
+                            <small><p>By selecting this option you agree to<br>
+                            <a href="">AgroShop's terms of service.</a></p></small>
+                            <a href="{% url 'setupshop' %}">
+                                <button style="background-color: blue; color:white; padding:5px; font-size:10px; font-weight:550; text-transform:uppercase;">select</button><br>
+                            </a>
+                        </div>
+
+                        <div style="width: 50%; min-width:226px; padding:20px; margin:0px auto 0px auto;">
+                            <h5><b>Use a custom name</b></h5>
+                            <p>Create a shop using brand or other name and picture.</p>
+                            <img src="../../static/customname.jpeg" alt="customname" width="90%">
+                            <a href="{% url 'createshop' %}">
+                                <button style="background-color: blue; color:white; padding:5px; font-size:10px; font-weight:550; text-transform:uppercase; margin-top:22px">select</button><br>
+                            </a>
+                        </div>
+
+                        <p style="font-size:10px; padding:0 20px 0 20px;">As a reminder, we may share non-personally identifiable information related to your channel and/or videos with our partners, including advertisers and rights holders</p>
+                        
+                        <button style="margin:0 auto 10px auto; background-color:white; border:none;" onclick="off(2)">cancel</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {%block body%}{%endblock%}
+
+        <script>
+            function chooseName(){
+                    document.querySelector('#overlay1').style.display = 'none';
+                    document.querySelector('#overlay2').style.display = 'block';
+                }
+                //script for overlay
+                function on(overlayNum){
+                    document.querySelector(`#overlay${overlayNum}`).style.display = 'block';
+                }
+                function off(overlayNum, reload=false){
+                    document.querySelector(`#overlay${overlayNum}`).style.display = 'none';
+                    if(reload == true)
+                        location.reload();
+                    //document.querySelector('#overlay2').style.display = 'none';
+                }
+                function offall(overlayNum){
+                    for(let i=1; i<=overlayNum; i++)
+                        document.querySelector(`#overlay${i}`).style.display = 'none';
+                }
+                
+        </script>
+
+    </body>
+
+</html>

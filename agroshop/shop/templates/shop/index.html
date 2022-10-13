@@ -1,0 +1,106 @@
+{% extends 'shop/layout.html'%}
+
+{%block title%}AgroShop{%endblock%}
+
+{%block body%}
+    <div class="slideshow-container">
+
+        <div class="mySlides fade">
+            <img src="../../static/order_fresh_vegetables.jpg" style="width:100%; height: 50vh;">
+        </div>
+        
+        <div class="mySlides fade">
+            <img src="../../static/veggies_phone.jpg" style="width:100%; height: 50vh;">
+        </div>
+        
+        <div class="mySlides fade">
+            <img src="../../static/mobile_delivary.jpg" style="width:100%; height: 50vh;">
+        </div>
+
+        <div class="mySlides fade">
+            <img src="../../static/phases.png" style="width:100%; height: 50vh;">
+        </div>
+        
+    </div>
+    <br>
+            
+    <div style="text-align:center">
+        <span class="dot"></span> 
+        <span class="dot"></span> 
+        <span class="dot"></span> 
+        <span class="dot"></span> 
+    </div>
+
+    <div class="shadow mb-5 bg-white rounded" style="padding: 3px 3px 3px 9%;">
+        {% for product in products %}
+            <div class="profileproducts shadow p-3 bg-white rounded" style="margin: 10px; height: 265px;">
+                    
+                <a href="{% url 'viewproduct' product.id %}" style="color:black; text-decoration:none;">
+                    <img style="margin-bottom: 4px; max-height:112.6px" src="{{product.image1.url}}" alt="" width="200px"><br>
+                    <b style="display: inline-block; width: 170px;">{{product.productname}}</b>
+                </a>
+                <div class="dropdown" style="float: right;">
+                    <i type="button" class="btn btn-light" style="background:transparent; border: 0px;" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="fa fa-ellipsis-v"></i>
+                    </i>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        {%if request.user.is_authenticated %}
+                            <a href="{% url 'viewproduct' product.id %}"  class="dropdown-item"><button data-videoid="{{video.id}}" class="btn"><i class="fas fa-cart-plus"></i>&nbsp;&nbsp;Add to Cart</button></a>
+                            <a href="{% url 'selectaddressforprod' product.id%}" class="dropdown-item" style="text-decoration: none;"><button class="btn"><i class="fas fa-shopping-bag"></i>&nbsp;&nbsp;Buy Now</button></a>
+                        {%endif%}
+                    </div>
+                </div>
+
+                <p style="margin-top: 5px; margin-bottom: 5px;"><b>₹{{product.discountedPrice}}</b>&nbsp;&nbsp;<s style="font-size:small;">₹{{product.actualPrice}}</s></p>
+                {{product.average_rating}}
+
+                {%if product.average_rating == 0%}
+                    <small>No Ratings</small>
+                {%endif%}
+                {% if product.average_rating == 1%}
+                    <img src="../../static/1star.png" alt="" width="100px">
+                {%endif%}
+                {%if product.average_rating == 2%}
+                    <img src="../../static/2star.png" alt="" width="100px">
+                {%endif%}
+                {% if product.average_rating == 3%}
+                    <img src="../../static/3star.png" alt="" width="100px">
+                {%endif%}
+                {% if product.average_rating == 4%}
+                    <img src="../../static/4star.png" alt="" width="100px">
+                {%endif%}
+                {% if product.average_rating == 5%}
+                    <img src="../../static/5star.png" alt="" width="100px">
+                {%endif%}
+
+                
+                
+            </div>
+            
+        {%endfor%}
+    </div>
+
+    
+    <script>
+        // let slideIndex = 0;
+        showSlides();
+        
+        // function showSlides() {
+        //     let i;
+        //     let slides = document.getElementsByClassName("mySlides");
+        //     let dots = document.getElementsByClassName("dot");
+        //     for (i = 0; i < slides.length; i++) {
+        //     slides[i].style.display = "none";  
+        //     }
+        //     slideIndex++;
+        //     if (slideIndex > slides.length) {slideIndex = 1}    
+        //     for (i = 0; i < dots.length; i++) {
+        //     dots[i].className = dots[i].className.replace(" active", "");
+        //     }
+        //     slides[slideIndex-1].style.display = "block";  
+        //     dots[slideIndex-1].className += " active";
+        //     setTimeout(showSlides, 1800); // Change image every 2 seconds
+        // }
+    </script>
+    
+{%endblock%}

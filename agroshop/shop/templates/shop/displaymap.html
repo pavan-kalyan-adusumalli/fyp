@@ -1,0 +1,12 @@
+{% extends 'shop/layout.html'%}
+
+{% block title %}Get directions | AgroShop{% endblock %}
+
+{%block body%}
+<div id="directions" class="profiledivisions" style="padding: 80px; margin-left: 0px; text-align: center; background-color: rgb(241, 240, 240);;">
+    <h3>We are waiting for you... Reach us using the following map.</h3>
+    <br>
+    <iframe src="{{shop.maplink}}" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy"
+    referrerpolicy="no-referrer-when-downgrade"></iframe>
+    </div>
+{%endblock%}

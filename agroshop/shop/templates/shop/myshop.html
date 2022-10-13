@@ -1,0 +1,220 @@
+{% extends 'shop/layout.html' %}
+
+{% block title %}My shop | AgroShop{% endblock %}
+
+{% block body %}
+
+    <div id="shopcoverpic">
+        <img src="../../static/phases.png" alt="default coverpic" width="90%">
+    </div>
+    <div id="shopinfo">
+        <img id="shopprofilepic" src="{{usershop.shoppicture.url}}" alt="image not found">
+        &nbsp;&nbsp;
+        <div id="name_and_Vstatus">
+            <h3 style="margin: none;">{{usershop.shopname}}</h3>
+            
+            {% if verefied%}
+                <p>Verefied by AgroShop&nbsp;<i class="bi bi-patch-check-fill" style="vertical-align: middle;"></i></p>
+            {%else%}
+                <p>Verification Pending&nbsp;<i class="bi bi-exclamation-circle-fill" style="vertical-align: middle;"></i></p>
+            {%endif%}
+        </div>
+        <a href="{% url 'customize' usershop.id %}"><button id="customize" class="btn btn-danger">CUSTOMIZE</button></a> 
+        
+        <div id="shopnavbar" style="clear: both;">
+            <button class="navbtn btn btn-light" onclick="showdiv('shop_overview_products')" id="homebtn" >Home</button>
+            <button class="navbtn btn btn-light" onclick="showdiv('shop_products')">Products</button>
+            <button class="navbtn btn btn-light" onclick="showdiv('shop_ratings')">Ratings</button>
+            <button class="navbtn btn btn-light" onclick="showdiv('aboutshop')">about</button>
+            <button class="navbtn btn btn-light" onclick="showdiv('directions')">directions</button>
+        </div>
+    </div>
+
+    <div id="shop_overview_products" class="profiledivisions" style="width: 85%; margin:0 6% 0 auto">
+        
+        <h5><b>Featured Products</b></h5>
+        <div class="overview_div">  
+                    
+            {%for product in featuredproducts%}
+                <div class="profileproducts">
+                    <a href="{% url 'viewproduct' product.id %}" style="color:black; text-decoration:none;">
+                        <img style="margin-bottom: 4px; max-height:112.6px" src="{{product.image1.url}}" alt="" width="200px"><br>
+                        <b style="display: inline-block; width: 170px;">{{product.productname}}</b>
+                    </a>
+                    <div class="dropdown" style="float: right;">
+                        <i type="button" class="btn btn-light" style="background:transparent; border: 0px;" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i class="fa fa-ellipsis-v"></i>
+                        </i>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                            {%if request.user.is_authenticated %}
+                                <button class="dropdown-item" data-videoid="{{video.id}}" onclick='watchlater(this)' ><i class="fa fa-clock-o"></i>&nbsp;&nbsp;Add to Cart</button>
+                                <button class="dropdown-item" data-videoid="{{video.id}}" onclick="savetoplaylist(this)"><i class="fa fa-list"></i>&nbsp;&nbsp;Buy Now</button>
+                            {%endif%}
+                        </div>
+                    </div>
+    
+                    <p style="margin-top: 5px;">₹{{product.discountedPrice}}</p>
+                </div>
+            {%empty%}
+                <div style="width: fit-content; margin:0 auto; text-align:center; padding:7%">
+                    <!-- <img src="../../static/noproducts.jpg" alt="NoVideos"> -->
+                    <h3>Add a Featured Product</h3>
+                    <p><small>Suggest premium products of your shop for customer attraction. Featured Products that you create will show up here.</small></p>
+                    <small>Learn more about <a href="">how to get started</a></small>
+                </div>
+            {%endfor%}
+        </div>
+        
+        <hr>
+        <h5><b>Uploads</b></h5>
+
+        <div class="overview_div">
+            {%for product in shopProducts%}
+            <div class="profileproducts">
+                
+                <a href="{% url 'viewproduct' product.id %}" style="color:black; text-decoration:none;">
+                    <img style="margin-bottom: 4px; max-height:112.6px" src="{{product.image1.url}}" alt="" width="200px"><br>
+                    <b style="display: inline-block; width: 170px;">{{product.productname}}</b>
+                </a>
+                <div class="dropdown" style="float: right;">
+                    <i type="button" class="btn btn-light" style="background:transparent; border: 0px;" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="fa fa-ellipsis-v"></i>
+                    </i>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        {%if request.user.is_authenticated %}
+                            <button class="dropdown-item" data-videoid="{{video.id}}" onclick='watchlater(this)' ><i class="fa fa-clock-o"></i>&nbsp;&nbsp;Add to Cart</button>
+                            <button class="dropdown-item" data-videoid="{{video.id}}" onclick="savetoplaylist(this)"><i class="fa fa-list"></i>&nbsp;&nbsp;Buy Now</button>
+                        {%endif%}
+                    </div>
+                </div>
+
+                <p style="margin-top: 5px;">₹{{product.discountedPrice}}</p>
+            </div>
+            {%empty%}
+
+            <div style="width: fit-content; margin:0 auto; text-align:center; padding:5%">
+                <img src="../../static/noproducts.jpg" alt="NoVideos" style="width: 200px; border-radius: 50%;">
+                <h3>Add a Product to Kick start your Bussiness</h3>
+                <p><small>Start showing your products and connecting with customers. Products that you add will show up here.</small></p>
+                <a href="{% url 'addproduct' %}"><button id="uploadVideo" class="btn btn-info" style="background-color: #337ab7;" onclick="on(3)">ADD PRODUCT</button> <br></a> 
+                <small>Learn more about <a href="">how to get started</a></small>
+            </div>
+            {%endfor%}
+
+        </div>
+    </div>
+<!--end of shop_overview-->
+
+<!--shop products division-->
+<div id="shop_products" class="profiledivisions" style="width: 85%; margin:0 6% 0 auto;">
+    <h5><b>All Products</b></h5>
+    <div id='container' style="margin-left:5%;">
+        {%for product in shopProducts%}
+            <div class="profileproducts">
+                <a href="{% url 'viewproduct' product.id %}" style="color:black; text-decoration:none;">
+                    <img style="margin-bottom: 4px; max-height:112.6px" src="{{product.image1.url}}" alt="" width="200px"><br>
+                    <b style="display: inline-block; width: 170px;">{{product.productname}}</b>
+                </a>
+                <div class="dropleft" style="float: right;">
+                    <i type="button" class="btn btn-light" style="background:transparent; border: 0px;" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="fa fa-ellipsis-v"></i>
+                    </i>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        {%if request.user.is_authenticated %}
+                            <button class="dropdown-item" data-videoid="{{video.id}}" onclick='watchlater(this)' ><i class="fa fa-clock-o"></i>&nbsp;&nbsp;Add to Cart</button>
+                            <button class="dropdown-item" data-videoid="{{video.id}}" onclick="savetoplaylist(this)"><i class="fa fa-list"></i>&nbsp;&nbsp;Buy Now</button>
+                        {%endif%}
+                    </div>
+                </div>
+
+                <p style="margin-top: 5px;">₹{{product.discountedPrice}}</p>
+            </div>
+        
+        {%empty%}
+            <div style="width: fit-content; margin:0 auto; text-align:center; padding:5%">
+                <img src="../../static/noproducts.jpg" alt="NoVideos" style="width: 200px; border-radius: 50%;">
+                <h3>Add a Product to Kick start your Bussiness</h3>
+                <p><small>Start showing your products and connecting with customers. Products that you add will show up here.</small></p>
+                <a href="{% url 'addproduct' %}"><button id="uploadVideo" class="btn btn-info" style="background-color: #337ab7;" onclick="on(3)">ADD PRODUCT</button> <br></a> 
+                <small>Learn more about <a href="">how to get started</a></small>
+            </div>
+        {%endfor%}
+    </div>
+</div>
+<!--end of channel videos division-->
+
+<!-- Ratings div starts -->
+<div id="shop_ratings" class="profiledivisions" style="width: 85%; margin:0 6% 0 auto;">
+    <div id="piechart" style="text-align: center;"></div>
+    <script type="text/javascript">
+        // Load google charts
+        google.charts.load('current', {'packages':['corechart']});
+        google.charts.setOnLoadCallback(drawChart);
+        
+        // Draw the chart and set the chart values
+        function drawChart() {
+          var data = google.visualization.arrayToDataTable([
+          ['Task', 'Hours per Day'],
+          ['1 star', 8],
+          ['2 star', 2],
+          ['3 star', 4],
+          ['4 star', 2],
+          ['5 star', 8]
+        ]);
+        
+          // Optional; add a title and set the width and height of the chart
+          var options = {'title':'Shop Ratings', 'width':550, 'height':400, backgroundColor:'rgb(241, 240, 240)', is3D:true};
+        
+          // Display the chart inside the <div> element with id="piechart"
+          var chart = new google.visualization.PieChart(document.getElementById('piechart'));
+          chart.draw(data, options);
+        }
+    </script>
+</div>
+<!-- Ratings div ends -->
+
+<!--about channel starts-->
+<div id="aboutshop" class="profiledivisions" style="width: 85%; margin:0 6% 0 auto;">
+    {% if usershop.description %}
+        <div style="margin-left: 5%; float:left; vertical-align:top;">
+            <h4>Channel description</h4>
+            {{usershop.description}}
+        </div>
+    {%endif%}
+    <div style="margin-left:50%; width:fit-content; display:inline-block;">
+        <p>{{totalproducts}} Products</p>
+        <p>Joined {{usershop.date_created}}</p>
+        <p><i class="bi bi-geo-alt-fill"></i>&nbsp;{{usershop.location}}</p>
+        <p>{{totalviews}} orders</p>
+    </div>
+</div><!--end of about--> 
+
+<!-- directions div -->
+<div id="directions" class="profiledivisions" style="padding: 100px; text-align: center; background-color: rgb(241, 240, 240);">
+    <iframe src="{{usershop.maplink}}" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy"
+    referrerpolicy="no-referrer-when-downgrade"></iframe>
+</div>
+<!-- end of directions div -->
+
+    <script>
+        function showdiv(divname){
+            document.querySelectorAll('.profiledivisions').forEach(divs =>{
+                divs.style.display = 'none';
+            })
+            document.querySelectorAll('.navbtn').forEach(btn =>{
+                btn.style.border = 'none';
+            })
+            document.querySelector(`#${divname}`).style.display = 'block';
+            document.addEventListener('click', ()=>{
+                const element = event.target;
+                if(element.className == 'navbtn btn btn-light')
+                    element.style.borderBottom = '1.5px solid grey';
+            })
+        }
+
+        document.addEventListener('DOMContentLoaded', ()=>{
+            showdiv('shop_overview_products');
+            document.querySelector('#homebtn').style.borderBottom = '1.5px solid grey';            
+        })
+    </script>
+{%endblock%}

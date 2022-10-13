@@ -1,0 +1,170 @@
+{% extends 'shop/layout.html' %}
+
+{% block title %}AgroShop | Add Product{%endblock%}
+{%block head%}
+<style>
+    #id_uploadedshop{
+        width: 20px;
+        float: right;
+    }
+    #id_hideComments{
+        margin-left: 50px;
+        display: inline-block;
+    }
+    #id_description{
+        height: 190px;
+        width: 85%;
+    }
+    #id_thumbnail, #id_subtitles{
+        display: inline-block;
+        font-size: 10px;
+    }
+    #id_category{
+        display: inline-block;
+    }
+    label{
+        margin: 20px 0 0 20px;
+    }
+    #id_recording{
+        margin: 20px auto 0 40%;
+    }
+    #text > #addVideo1stoverlay > h5{
+        display: none;
+    }
+    #text > #addVideo1stoverlay > .close{
+        float: right;
+        margin: 5px 8px 0 0;
+    }
+    #overlay3 > #text > div > .form-control, #overlay3 > #text > div > b{
+        margin-left: 20px;
+    }
+    #id_productname{
+        width: 50%;
+    }
+    
+    
+</style>
+{%endblock%}
+
+{%block body%}
+<div style="background-color: rgb(241, 240, 240); margin: 20px auto 0px auto; width: 97%;">
+    {% if user.is_authenticated%}
+    <div style="width: fit-content; margin:0 auto; text-align:center; padding:10%">
+        
+        <img src="../../static/noproducts.jpg" alt="NoVideos" style="width: 200px; border-radius: 50%;">
+        <h3 style="margin-top: 10px;">Upload a Product here</h3>
+        <p><small>Start showing your products and connecting with customers.</small></p>
+        <button id="uploadProduct" class="btn btn-info" style="background-color: #337ab7;" onclick="on(3)">UPLOAD PRODUCT</button> <br>
+        <small style="display:inline-block; margin-top: 10px;">Learn more about <a href="">how to get started</a></small>
+    </div>
+
+    <form action="{% url 'uploadproduct' %}" method="POST" enctype="multipart/form-data">
+        {%csrf_token%}
+        <div id="overlay3">
+            <div id="text" style="width: 65%;">
+                <div style="background-color:white; color:black; height:500px; overflow-y:auto; border-radius:5px;">
+                    <p id="producttitle" style="float: left; font-size:18px; font-weight:bold; margin:10px 0 0 20px;"></p>
+                    <button type="button" class="btn btn-light close" style="margin: 10px 10px 0 0;" onclick="off(3)"><i class="fa fa-times"></i></button>
+                    <br>
+                    <hr>
+                    <img style="float: right; margin-right:10%; border-radius:50%;" src="{{extradata.picture}}" alt="" width="7%">
+
+                    <h4 style="margin-left: 20px;"><b>Details</b></h4>
+                    {{productform.uploadedshop}}
+                    <label style="margin-top:2px;" for="productname">Product Name</label>
+                    {{productform.productname}}
+
+                    <label style="margin-top: 30px;" for="actualprice">Actual Price</label>
+                    {{productform.actualPrice}}
+
+                    <label style="margin-top: 30px;" for="discountedprice">Discounted Price</label>
+                    {{productform.discountedPrice}} <br>
+
+                    <label style="margin-top: 30px;" for="soldby">Manufactured by</label>
+                    {{productform.soldby}}
+
+                    <label style="margin-top: 30px;" for="producttype">Product Type</label>
+                    {{productform.producttype}}
+
+                    <label style="margin-top: 30px;" for="material">Material</label>
+                    {{productform.material}}
+
+                    <label style="margin-top: 30px;" for="countryoforigin">Country of Origin</label>
+                    {{productform.countryoforigin}}
+
+                    <label style="margin-top: 30px;" for="warranty">Warranty</label>
+                    {{productform.warranty}}
+
+                    <label style="margin-top: 30px;" for="quantity">Quantity</label>
+                    {{productform.quantity}} <br>
+
+                    <label style="margin-top: 30px;" for="description">Description</label>
+                    {{productform.description}}
+
+                    <label for="image1">Choose Main Image <small style="color: #337ab7;">(Main image is displayed everywhere)</small></label><br>
+                    {{productform.image1}}<br>
+                    <label for="image2">Choose Product Image 2</label><br>
+                    {{productform.image2}}<br>
+                    <label for="image3">Choose Product Image 3</label><br>
+                    {{productform.image3}}<br>
+                    <label for="image4">Choose Product Image 4</label><br>
+                    {{productform.image4}}<br>
+
+                    <label for="featuredProduct">Featured Product</label><br>
+                    <small style="margin-left: 40px;">Make this as Featured Product?</small>&nbsp;&nbsp;{{productform.featuredProduct}}
+                    <p id="hiddenshopid" style="display: inline-block; color: white;">{{usershop.id}}</p>
+                    <br>
+                    <button type="submit" id="uploadbtn" onclick="displaysuccess()" class="btn btn-info" style="background-color:#337ab7; float: right; margin:0 20px 20px 0;">Upload</button>
+                    <br>
+                    <br>
+                </div>
+            </div>
+        </div>
+    </form>
+    {%else%}
+    <div style="text-align: center; margin:10% auto 0 auto; width:fit-content;">
+        <span style="font-size:90px;" class="fa fa-history"></span>
+        <h3>Sign in to Add Products</h3>
+        <small>It is not possible to add products when you're signed out.</small><br><br>
+        <a href="#"><button class="btn btn-info"><span class="fa fa-user-circle-o"></span>&nbsp;&nbsp;sign in</button></a>
+    </div>
+    {%endif%}
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', ()=>{
+        document.querySelector('#overlay3').style.display = 'block';
+
+        document.querySelector('#id_actualPrice').placeholder = 'Add Actual price';
+        document.querySelector('#id_discountedPrice').placeholder = 'Add Discounted price';
+
+        const shopid = document.querySelector('#hiddenshopid').innerHTML;
+        document.querySelector('#id_uploadedshop').value = shopid;
+
+        for(let i=1; i<=4; i++)
+        {
+            document.querySelector(`#id_image${i}`).style.marginLeft = '40px';
+            document.querySelector(`#id_image${i}`).style.fontSize='12px';
+        }
+        document.querySelector('#id_warranty').placeholder = 'In Months';
+        document.querySelector('#id_quantity').placeholder = "In Kilograms/Litres/Pieces";
+        document.querySelector('#id_featuredProduct').style.verticalAlign = 'middle';
+        //producttitle
+        //first make the product title as untitled
+        document.querySelector('#id_productname').value = "Untitled";
+        document.querySelector('#producttitle').innerHTML = 'Untitled';
+
+        document.querySelector('#id_productname').onkeyup = ()=>{
+            document.querySelector('#producttitle').innerHTML = document.querySelector('#id_productname').value;
+        }
+        //end of videotitle
+
+        function displaysuccess()
+        {
+            alert("Product has been added!");
+        }
+    });
+    
+</script>
+
+{%endblock%}

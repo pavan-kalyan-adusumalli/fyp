@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <!--Favicon-->
+        <link rel="icon" href="../../static/Bag_favicon.jpg" type="image/x-icon">
+        <title>Payment status | AgroShop</title>
+            <!-- Bootstrap Link -->
+            <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"
+            integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+
+            <!-- font awesome link -->
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+            <link rel="stylesheet" href="../../static/style.css">
+            <script src="../../static/script.js"></script>
+
+            <!-- JQUERY (First) -->
+            <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+                integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+                crossorigin="anonymous"></script>
+
+            <!-- Popper JS -->
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js"
+                integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut"
+                crossorigin="anonymous"></script>
+
+            <!-- BOOTSTRAP JS (Last) -->
+            <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js"
+                integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k"
+                crossorigin="anonymous"></script>
+
+            <!-- HANDLE BARS TEMPLATE-->
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.11/handlebars.min.js"></script>
+
+            <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
+
+            <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    </head>
+    <body>
+        <a href="{% url 'homepage'%}"><img src="../../static/Screenshot (86).png" alt="" width="130px" height="55px"></a>
+        {% if paymentstatus %}
+            <div class="shadow p-3 rounded" style="text-align: center; width: 25%; margin: 20px auto 0px auto;">
+                <p style="display: inline-block; text-align: center;">
+                    <i style="font-size: 100px; color: limegreen;" class="bi bi-patch-check-fill"></i><br>
+                    <h5>Payment Successful</h5>
+                </p>
+
+                <div class="shadow-sm p-3 rounded" style="display: inline-block; width: 239px; background-color: rgb(241, 240, 240);">
+                    <!-- <span style="display: inline-block; text-align: left; margin: 10px;">
+                        <small>Order id:</small><br>
+                        <small>Transaction id:</small><br>
+                        <small>Date:</small><br>
+                        <small>Amount:</small>
+                    </span>
+                    <span style="display: inline-block; text-align: left; margin: 10px;">
+                        <small>8989ujjjd</small><br>
+                        <small>dkeiiieek</small><br>
+                        <small>28-09-2022</small><br>
+                        <small>₹500</small>
+                    </span> -->
+                    <p style="font-size: 12px;">Your order has been placed successfully. <br>Track your order by clicking your orders button.</p>
+                </div>
+                <br>
+
+                <a href="{% url 'myorders' %}"><button class="btn btn-warning" style="margin: 20px 0px 20px 0px;">Your orders</button></a>
+            </div>
+        {%else%}
+            <div class="shadow p-3 rounded" style="text-align: center; width: 25%; margin: 20px auto 0px auto;">
+            
+                <p style="display: inline-block; text-align: center;">
+                    <i class="bi bi-exclamation-circle-fill" style="font-size: 100px; color: rgba(255, 0, 0, 0.871);"></i><br>
+                    <h5>Payment Failed!</h5>
+                </p>
+
+                <div class="shadow-sm p-3 rounded" style="display: inline-block; width: 239px; background-color: rgb(241, 240, 240);">
+                    <small style="font-size: 14px;">Your payment couldn't be processed right now <br>
+                    Please try again later.</small>
+                </div><br>
+
+                <a href="{% url 'myorders' %}"><button class="btn btn-warning" style="margin: 20px 0px 20px 0px;">Your orders</button></a>
+            </div>
+        {%endif%} 
+        
+    </body>
+</html>

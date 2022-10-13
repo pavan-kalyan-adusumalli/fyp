@@ -1,0 +1,208 @@
+<html lang="en">
+    <head>
+        <title>Checkout | AgroShop</title>
+        <!--Favicon-->
+        <link rel="icon" href="../../static/Bag_favicon.jpg" type="image/x-icon">
+
+        <!-- Bootstrap Link -->
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"
+        integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+
+        <!-- font awesome link -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+        <link rel="stylesheet" href="../../static/style.css">
+        <script src="../../static/script.js"></script>
+
+        <!-- JQUERY (First) -->
+        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+            integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+            crossorigin="anonymous"></script>
+
+        <!-- Popper JS -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js"
+            integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut"
+            crossorigin="anonymous"></script>
+
+        <!-- BOOTSTRAP JS (Last) -->
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js"
+            integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k"
+            crossorigin="anonymous"></script>
+
+        <!-- HANDLE BARS TEMPLATE-->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.11/handlebars.min.js"></script>
+
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
+
+        <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+        
+        <style>
+            
+            #orderingproducts
+            {
+                margin-left: 25px;
+                margin-top: 20px;
+                margin-right: 20px;
+                display: inline-block;
+                width: 50%;
+            }
+            
+            #paymentdetails
+            {
+                display: inline-block;
+                width: 400px;
+                vertical-align: top;
+                margin-top: 20px;
+            }
+            #paymentdetails > span
+            {
+                display: inline-block;
+            }
+            
+            .fstspan{
+                margin-left: 25px;
+            }
+            .sndspan{
+                /* margin-left: 25px; */
+                float: right;
+                margin-right: 20px;
+            }
+
+        </style>
+        
+    </head>
+
+    <body>
+        <img src="../../static/Screenshot (86).png" alt="" width="130px" height="55px">
+
+        <h4 style="margin: 25px auto 10px 25px;">Review your order</h4>
+        <small style="margin-left: 25px;">By placing your order, you agree to Agroshop's <a href="">privacy policy</a> and <a href="">conditions of use.</a></small>
+        <br>
+        <div>
+            <div id="orderingproducts" class="shadow-sm p-3 bg-white rounded">
+                {% for product in orderproducts%}
+                <div>
+                    <img src="{{product.image1.url}}" alt="" width="100px" height="100px" style="margin-left: 23px; vertical-align: top;">
+                    <div style="display: inline-block; margin-left: 10px;">
+                        <a id="sideprodanchor" href="">{{product.productname}}</a><br>
+                        <small>by {{product.soldby}}</small><br>
+                        <span style="color: #c2562e;">₹{{product.discountedPrice}}</span><br>
+                        <a href="{% url 'viewproduct' product.id %}"><small>See all details</small></a>
+                    </div>
+                </div>
+                <br>
+                {%endfor%}
+
+                
+
+            </div>
+
+            <div id="paymentdetails" class="shadow-sm p-3 bg-white rounded">
+                <button id="rzp-button1" class="btn btn-warning" style="margin-left: 20px;"><i class="bi bi-credit-card"></i>&nbsp;Place your order</button>
+                <!-- <button class="btn btn-info"><i class="bi bi-cash-stack"></i>&nbsp;Cash on delivary</button> -->
+
+                <h6 style="margin-top: 10px; margin-left: 25px;">Order Summary</h6>
+
+                <span class="fstspan">
+                    <small>Items:</small><br>
+                    <small>Shipping & handling</small>
+                </span>
+                <span class="sndspan">
+                    <small>₹{{amount}}</small><br>
+                    <small>₹0</small>
+                </span>
+                <hr>
+
+                <span class="fstspan">
+                    <small>Total before extra charges:</small><br>
+                    <small>Estimated extra charges</small>
+                </span>
+                <span class="sndspan">
+                    <small>₹{{amount}}</small><br>
+                    <small>₹0</small>
+                </span>
+                <hr>
+                <span class="fstspan">
+                    <small style="font-size: 20px; color: #c2562e;">Order total</small>
+                </span>
+                <span class="sndspan">
+                    <small style="font-size: 20px; color: #c2562e;">₹{{amount}}</small>
+                </span>
+            </div>
+
+        </div>
+        
+        <hr style="width: 80%;">
+
+
+        <div style="text-align: center;">
+            <small><a href="">Privacy Notice</a> &copy; 2012-2022, AgroShop.com</small>
+            <br>
+            <br>
+        </div>
+
+        <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+        <script>
+            var options = {
+                "key": "{{api_key}}", // Enter the Key ID generated from the Dashboard
+                "amount": "50000", // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
+                "currency": "INR",
+                "name": "Acme Corp",
+                "description": "Test Transaction",
+                "callback_url": "http://127.0.0.1:8000/paymentstatus",
+                "image": "https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.shutterstock.com%2Fsearch%2Famazon&psig=AOvVaw0cvUxXyw6rktGL4MfHISam&ust=1648829604128000&source=images&cd=vfe&ved=0CAgQjRxqFwoTCLDVuonf8PYCFQAAAAAdAAAAABAD",
+                "order_id": "{{order_id}}", //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
+                "handler": function (response) {
+                    alert(response.razorpay_payment_id);
+                    alert(response.razorpay_order_id);
+                    alert(response.razorpay_signature);
+
+                    const pay_id = response.razorpay_payment_id;
+                    const ord_id = response.razorpay_order_id;
+                    const signature = response.razorpay_signature;
+                    fetch(`/qrsavedetails?ordid=${ord_id}&payid=${pay_id}&sig=${signature}`)
+                    .then(response => response.json())
+                    .then(data =>{
+                        if(data.commentStatus == 'loggedout'){
+                            alert('you need to login to add a comment')
+                        }
+                    })
+
+                    // alert(response.razorpay_payment_id);
+                    if (typeof response.razorpay_payment_id == 'undefined' ||  response.razorpay_payment_id < 1) 
+                    {
+                        var redirect_url = "{% url 'paymentstatus' 'fail' %}";
+                    }
+                    else {
+                        var redirect_url = "{% url 'paymentstatus' 'success' %}";
+                    }
+                    location.href = redirect_url;
+                },
+                "prefill": {
+                    "name": "Gaurav Kumar",
+                    "email": "gaurav.kumar@example.com",
+                    "contact": "9999999999"
+                },
+                "notes": {
+                    "address": "Razorpay Corporate Office"
+                },
+                "theme": {
+                    "color": "#3399cc"
+                }
+            };
+            var rzp1 = new Razorpay(options);
+            rzp1.on('payment.failed', function (response) {
+                alert(response.error.code);
+                alert(response.error.description);
+                alert(response.error.source);
+                alert(response.error.step);
+                alert(response.error.reason);
+                alert(response.error.metadata.order_id);
+                alert(response.error.metadata.payment_id);
+            });
+            document.getElementById('rzp-button1').onclick = function (e) {
+                rzp1.open();
+                e.preventDefault();
+            }
+        </script>
+    </body>
+</html>
